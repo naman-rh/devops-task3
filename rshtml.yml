@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata: 
+  name: rswebhtml
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      env: dev
+      dc: IN
+      app: webserver
+    matchExpressions:
+      - { key: dc, operator: In, values: [ IN , US ]}
+      - { key: env, operator: In, values: [ dev ]}
+      - { key: app, operator: In, values: [ webserver ]}
+  template:
+    metadata:
+      name: mypodhtml
+      labels:
+        env: dev
+        dc: IN
+        app: webserver
+    spec:
+      containers:
+      - name: "myconthtml"
+        image: "httpd:latest"
+        volumeMounts:
+          - name: mount1
+            mountPath: /usr/local/apache2/htdocs/
+      volumes:
+        - name: mount2
+          persistenVolumeClaim:
+            claimname: pvcforwebserver

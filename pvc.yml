@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvcforwebserver
+spec:
+  accessmodes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi

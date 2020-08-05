@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata: 
+  name: rswebphp
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      env: dev
+      dc: IN
+      app: webserver
+    matchExpressions:
+      - { key: dc, operator: In, values: [ IN , US ]}
+      - { key: env, operator: In, values: [ dev ]}
+      - { key: app, operator: In, values: [ webserver ]}
+  template:
+    metadata:
+      name: mypodphp
+      labels:
+        env: dev
+        dc: IN
+        app: webserver
+    spec:
+      containers:
+      - name: "mycontphp"
+        image: "php:v1"
+        volumeMounts:
+          - name: mount3
+            mountPath: /var/www/html/
+      volumes:
+        - name: mount4
+          persistenVolumeClaim:
+            claimname: pvcforwebserver
